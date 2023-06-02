@@ -2,8 +2,6 @@ import app from './app'
 import config from './config'
 import dbConnect from './config/dbConnect'
 
-const name = 'abhi'
-
 dbConnect()
   .then(() => {
     app.listen(config.port, () => {
