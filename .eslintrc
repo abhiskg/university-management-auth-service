@@ -1,8 +1,8 @@
-// .eslintrc
 {
+  "root": true,
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 12,
+    "ecmaVersion": "latest",
     "sourceType": "module"
   },
   "plugins": ["@typescript-eslint/eslint-plugin"],
@@ -14,15 +14,23 @@
 
   "rules": {
     "@typescript-eslint/no-unused-vars": "error",
-    "no-console": "error",
-    "no-undef": "error",
+    // "no-console": "error",
+    // "no-undef": "error",
     "no-unused-expressions": "error",
     "no-unreachable": "error",
-    "@typescript-eslint/consistent-type-definitions": ["error", "type"]
+    "@typescript-eslint/consistent-type-definitions": ["error", "type"],
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      { "prefer": "type-imports", "fixStyle": "inline-type-imports" }
+    ]
   },
 
   "env": {
     "browser": true,
     "es2021": true
+    // "node": true
+  },
+  "globals": {
+    "process": "readonly"
   }
 }

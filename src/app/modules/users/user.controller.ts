@@ -1,11 +1,11 @@
-import { Request, Response } from 'express'
-import { createUserToDB } from './user.service'
+import type { RequestHandler } from 'express'
+import { UserService } from './user.service'
 
-const createNewUser = async (req: Request, res: Response) => {
-  const { user } = req.body
+const createNewUser: RequestHandler = async (req, res) => {
+  const user = req.body
 
   try {
-    const result = await createUserToDB(user)
+    const result = await UserService.createUserToDB(user)
 
     res.status(200).json({
       success: true,
@@ -19,4 +19,4 @@ const createNewUser = async (req: Request, res: Response) => {
   }
 }
 
-export { createNewUser }
+export const UserController = { createNewUser }

@@ -1,10 +1,11 @@
 import config from '../../../config'
-import { IUser } from './user.interface'
+import type { IUser } from './user.interface'
 import User from './user.model'
 import { generateUserId } from './user.utils'
 
-const createUserToDB = async (user: IUser) => {
+const createUserToDB = async (user: IUser): Promise<IUser | null> => {
   // default password
+
   if (!user.password) {
     user.password = config.default_user_password
   }
@@ -19,4 +20,4 @@ const createUserToDB = async (user: IUser) => {
   return createUser
 }
 
-export { createUserToDB }
+export const UserService = { createUserToDB }
