@@ -8,6 +8,6 @@ dbConnect()
       console.log(`Database connected and listing on port ${config.port}`)
     })
   })
-  .catch(err => {
+  .catch((err) => {
     console.log((err as Error).message)
   })
