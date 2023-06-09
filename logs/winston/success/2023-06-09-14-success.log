@@ -1,0 +1,12 @@
+{
+  message: 'Database is connected Successfully',
+  level: 'info',
+  label: 'success',
+  timestamp: '2023-06-09T08:29:27.486Z'
+}
+{
+  message: 'Application listing on port 6000',
+  level: 'info',
+  label: 'success',
+  timestamp: '2023-06-09T08:29:27.503Z'
+}

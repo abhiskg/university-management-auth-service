@@ -1,16 +1,16 @@
-import cors from 'cors'
-import express from 'express'
-import { UserRoutes } from './app/modules/user/user.route'
+import cors from 'cors';
+import express from 'express';
+import { UserRoutes } from './app/modules/user/user.route';
 
-const app = express()
+const app = express();
 
-app.use(cors())
+app.use(cors());
 
 // Parser
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // api routes
-app.use('/api/v1/users', UserRoutes)
+app.use('/api/v1/users', UserRoutes);
 
-export default app
+export default app;

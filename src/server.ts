@@ -1,28 +1,19 @@
 import mongoose from 'mongoose';
 import app from './app';
 import config from './config';
+import { logger, errorLogger } from './shared/logger';
 
 (async function dbConnect() {
   try {
     await mongoose.connect(config.mongo_uri, {
       dbName: 'university-management',
     });
-    console.log('Database connected Successfully');
+    logger.info('Database is connected Successfully');
 
     app.listen(config.port, () => {
-      console.log(`Application listing on port ${config.port}`);
+      logger.info(`Application listing on port ${config.port}`);
     });
   } catch (error) {
-    console.log('Failed to connect');
+    errorLogger.error('Failed to connect database', error);
   }
 })();
-
-// dbConnect()
-//   .then(() => {
-//     app.listen(config.port, () => {
-//       console.log(`Database connected and listing on port ${config.port}`)
-//     })
-//   })
-//   .catch((err) => {
-//     console.log((err as Error).message)
-//   })
