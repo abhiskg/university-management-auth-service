@@ -19,10 +19,8 @@
   "author": "",
   "license": "ISC",
   "lint-staged": {
-    "src/**/*.ts": [
-      "prettier --ignore-path ./.prettierignore --write \"**/*.+(js|ts|json)\"",
-      "eslint --ignore-path .eslintignore --ext .js,.ts ."
-    ]
+    "src/**/*.ts": "pnpm lint-prettier"
+    
   },
   "dependencies": {
     "cors": "^2.8.5",
