@@ -20,8 +20,8 @@
   "license": "ISC",
   "lint-staged": {
     "src/**/*.ts": [
-      "pnpm lint:check",
-      "pnpm prettier:check"
+      "pnpm prettier:check",
+      "pnpm lint:check"
     ]
   },
   "dependencies": {
