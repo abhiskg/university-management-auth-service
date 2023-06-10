@@ -1,4 +1,4 @@
-import type { Model } from 'mongoose';
+import type { Model } from "mongoose";
 
 export type IUser = {
   id: string;

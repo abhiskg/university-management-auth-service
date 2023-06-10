@@ -1,8 +1,8 @@
-import * as dotenv from 'dotenv';
-import path from 'path';
+import * as dotenv from "dotenv";
+import path from "path";
 
 // cwd means current directory
-dotenv.config({ path: path.join(process.cwd(), '.env') });
+dotenv.config({ path: path.join(process.cwd(), ".env") });
 
 export default {
   port: process.env.PORT,
