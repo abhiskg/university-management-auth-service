@@ -20,8 +20,8 @@
   "license": "ISC",
   "lint-staged": {
     "src/**/*.ts": [
-      "pnpm prettier:check",
-      "pnpm lint:check"
+      "prettier --ignore-path ./.prettierignore --write \"**/*.+(js|ts|json)\"",
+      "eslint --ignore-path .eslintignore --ext .js,.ts ."
     ]
   },
   "dependencies": {
