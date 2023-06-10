@@ -6,6 +6,7 @@ const createNewUser: RequestHandler = catchAsyncError(async (req, res) => {
   const user = req.body;
   const result = await UserService.createUser(user);
 
+  console.log("first");
   res.status(200).json({
     success: true,
     data: result,
