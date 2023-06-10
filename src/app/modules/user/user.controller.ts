@@ -5,7 +5,7 @@ import { UserService } from './user.service';
 const createNewUser: RequestHandler = catchAsyncError(async (req, res) => {
   const { user } = req.body;
 
-  const result = await UserService.createUserToDB(user);
+  const result = await UserService.createUser(user);
 
   res.status(200).json({
     success: true,

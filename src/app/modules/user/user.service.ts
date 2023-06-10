@@ -4,7 +4,7 @@ import type { IUser } from './user.interface';
 import User from './user.model';
 import { generateUserId } from './user.utils';
 
-const createUserToDB = async (user: IUser): Promise<IUser | null> => {
+const createUser = async (user: IUser): Promise<IUser | null> => {
   // default password
 
   if (!user.password) {
@@ -21,4 +21,4 @@ const createUserToDB = async (user: IUser): Promise<IUser | null> => {
   return createUser;
 };
 
-export const UserService = { createUserToDB };
+export const UserService = { createUser };

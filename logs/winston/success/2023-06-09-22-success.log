@@ -1,0 +1,36 @@
+{
+  message: 'Database is connected Successfully',
+  level: 'info',
+  label: 'success',
+  timestamp: '2023-06-09T16:25:05.748Z'
+}
+{
+  message: 'Application listing on port 6000',
+  level: 'info',
+  label: 'success',
+  timestamp: '2023-06-09T16:25:05.766Z'
+}
+{
+  message: 'Database is connected Successfully',
+  level: 'info',
+  label: 'success',
+  timestamp: '2023-06-09T16:26:51.841Z'
+}
+{
+  message: 'Application listing on port 6000',
+  level: 'info',
+  label: 'success',
+  timestamp: '2023-06-09T16:26:51.858Z'
+}
+{
+  message: 'Database is connected Successfully',
+  level: 'info',
+  label: 'success',
+  timestamp: '2023-06-09T16:27:11.693Z'
+}
+{
+  message: 'Application listing on port 6000',
+  level: 'info',
+  label: 'success',
+  timestamp: '2023-06-09T16:27:11.711Z'
+}
