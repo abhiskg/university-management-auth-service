@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import ApiError from "../../../errors/ApiError";
 import {
   academicSemesterCodes,
   academicSemesterMonths,
@@ -39,8 +40,21 @@ const academicSemesterSchema = new Schema<IAcademicSemester>(
   { timestamps: true }
 );
 
+// Same title and same year error handling
+academicSemesterSchema.pre("save", async function (next) {
+  const isExist = await AcademicSemester.findOne({
+    title: this.title,
+    year: this.year,
+  });
+  if (isExist) {
+    return next(new ApiError(409, "Academic Semester already exist"));
+  }
+  next();
+});
+
 const AcademicSemester = model<IAcademicSemester, AcademicSemesterModel>(
   "AcademicSemester",
   academicSemesterSchema
 );
+
 export default AcademicSemester;

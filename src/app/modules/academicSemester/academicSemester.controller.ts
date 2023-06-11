@@ -1,4 +1,5 @@
 import type { RequestHandler } from "express";
+import sendResponse from "../../../shared/sendResponse";
 import catchAsyncError from "../../middlewares/catchAsyncError";
 import { AcademicSemesterService } from "./academicSemester.service";
 
@@ -13,8 +14,10 @@ const createSemester: RequestHandler = catchAsyncError(async (req, res) => {
     year,
   });
 
-  res.status(200).json({
+  sendResponse(res, {
+    statusCode: 200,
     success: true,
+    message: "Academic semester created successfully!",
     data: result,
   });
 });
