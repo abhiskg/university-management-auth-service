@@ -5,7 +5,7 @@ import type {
 } from "../types/error.type";
 
 const handleZodError = (error: ZodError): IGenericErrorResponse => {
-  const errorMessage: IGenericErrorMessage[] = error.issues.map((issue) => {
+  const errorMessages: IGenericErrorMessage[] = error.issues.map((issue) => {
     return {
       message: issue.message,
       path: issue.path[issue.path.length - 1],
@@ -15,7 +15,7 @@ const handleZodError = (error: ZodError): IGenericErrorResponse => {
   return {
     statusCode: 400,
     message: "Validation Error",
-    errorMessage,
+    errorMessages,
   };
 };
 

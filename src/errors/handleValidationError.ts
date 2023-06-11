@@ -7,7 +7,7 @@ import type {
 const handleValidationError = (
   err: Error.ValidationError
 ): IGenericErrorResponse => {
-  const errorMessage: IGenericErrorMessage[] = Object.values(err.errors).map(
+  const errorMessages: IGenericErrorMessage[] = Object.values(err.errors).map(
     (el) => {
       return {
         path: el?.path,
@@ -19,7 +19,7 @@ const handleValidationError = (
   return {
     statusCode: 400,
     message: "Validation Error",
-    errorMessage,
+    errorMessages,
   };
 };
 
