@@ -1,0 +1,36 @@
+{
+  message: 'Database is connected Successfully',
+  level: 'info',
+  label: 'success',
+  timestamp: '2023-06-10T17:23:25.853Z'
+}
+{
+  message: 'Application listing on port 3000',
+  level: 'info',
+  label: 'success',
+  timestamp: '2023-06-10T17:23:25.862Z'
+}
+{
+  message: 'Database is connected Successfully',
+  level: 'info',
+  label: 'success',
+  timestamp: '2023-06-10T17:24:43.494Z'
+}
+{
+  message: 'Application listing on port 3000',
+  level: 'info',
+  label: 'success',
+  timestamp: '2023-06-10T17:24:43.507Z'
+}
+{
+  message: 'Database is connected Successfully',
+  level: 'info',
+  label: 'success',
+  timestamp: '2023-06-10T17:25:05.950Z'
+}
+{
+  message: 'Application listing on port 3000',
+  level: 'info',
+  label: 'success',
+  timestamp: '2023-06-10T17:25:05.959Z'
+}

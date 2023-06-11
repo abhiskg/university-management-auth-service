@@ -11,12 +11,12 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// app.get("/", async () => {
+//   Promise.reject(new Error("Unhandled promise Rejection"));
+// });
+
 // api routes
 app.use("/api/v1/users", UserRoutes);
-
-app.get("/", async () => {
-  Promise.reject(new Error("Unhandled promise Rejection"));
-});
 
 // global error handler
 app.use(globalErrorHandler);

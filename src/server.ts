@@ -4,13 +4,13 @@ import app from "./app";
 import config from "./config";
 import { errorLogger, logger } from "./shared/logger";
 
+let server: Server;
+
 // uncaught exception error
 process.on("uncaughtException", (error) => {
   errorLogger.error(error);
   process.exit(1);
 });
-
-let server: Server;
 
 (async function () {
   try {

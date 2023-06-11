@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "nodemon src/server.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "start": "node dist/server.js",
     "build": "tsc",
     "lint:check": "eslint --ignore-path .eslintignore --ext .js,.ts .",
@@ -20,7 +20,6 @@
   "license": "ISC",
   "lint-staged": {
     "src/**/*.ts": "pnpm lint-prettier"
-    
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -50,6 +49,7 @@
     "prettier": "^2.8.8",
     "supertest": "^6.3.3",
     "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.0.4"
   }
 }
