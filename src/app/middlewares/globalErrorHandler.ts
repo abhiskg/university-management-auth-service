@@ -5,8 +5,8 @@ import config from "../../config";
 import ApiError from "../../errors/ApiError";
 import handleValidationError from "../../errors/handleValidationError";
 import handleZodError from "../../errors/handleZodError";
+import type { IGenericErrorMessage } from "../../interfaces/error.interface";
 import { errorLogger } from "../../shared/logger";
-import type { IGenericErrorMessage } from "../../types/error.type";
 
 const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
   config.env === "development"

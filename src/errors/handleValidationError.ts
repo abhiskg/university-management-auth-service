@@ -1,8 +1,6 @@
 import type { Error } from "mongoose";
-import type {
-  IGenericErrorMessage,
-  IGenericErrorResponse,
-} from "../types/error.type";
+import type { IGenericErrorMessage } from "../interfaces/error.interface";
+import type { IGenericErrorResponse } from "../interfaces/response.interface";
 
 const handleValidationError = (
   err: Error.ValidationError
