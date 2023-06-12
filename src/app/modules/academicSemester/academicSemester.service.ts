@@ -2,8 +2,14 @@ import ApiError from "../../../errors/ApiError";
 import { PaginationHelper } from "../../../helpers/pagination.helper";
 import type { IPaginationOptions } from "../../../interfaces/pagination.interface";
 import type { IGenericResponse } from "../../../interfaces/response.interface";
-import { academicSemesterTitleCodeMapper } from "./academicSemester.constant";
-import type { IAcademicSemester } from "./academicSemester.interface";
+import {
+  academicSemesterSearchableFields,
+  academicSemesterTitleCodeMapper,
+} from "./academicSemester.constant";
+import type {
+  IAcademicSemester,
+  IAcademicSemesterFilters,
+} from "./academicSemester.interface";
 import AcademicSemester from "./academicSemester.mode";
 
 const createSemester = async (payload: IAcademicSemester) => {
@@ -16,8 +22,11 @@ const createSemester = async (payload: IAcademicSemester) => {
 };
 
 const getAllSemester = async (
+  filters: IAcademicSemesterFilters,
   paginationOptions: IPaginationOptions
 ): Promise<IGenericResponse<IAcademicSemester[]>> => {
+  const { search, ...filtersData } = filters;
+
   const { page, limit, skip, sortCondition } =
     PaginationHelper.calculatePagination(paginationOptions, {
       limit: 10,
@@ -26,7 +35,44 @@ const getAllSemester = async (
       sortOrder: "desc",
     });
 
-  const result = await AcademicSemester.find()
+  const andConditions = [];
+
+  if (search) {
+    andConditions.push({
+      $or: academicSemesterSearchableFields.map((field) => ({
+        [field]: { $regex: search, $options: "i" },
+      })),
+    });
+  }
+
+  if (Object.keys(filtersData).length) {
+    andConditions.push({
+      $and: Object.entries(filtersData).map(([field, value]) => ({
+        [field]: value,
+      })),
+    });
+  }
+
+  // const andConditions = [
+  //   {
+  //     $or: [
+  //       {
+  //         title: { $regex: search, $options: "i" },
+  //       },
+  //       {
+  //         code: { $regex: search, $options: "i" },
+  //       },
+  //       {
+  //         year: { $regex: search, $options: "i" },
+  //       },
+  //     ],
+  //   },
+  // ];
+
+  const filterCondition =
+    andConditions.length > 0 ? { $and: andConditions } : {};
+
+  const result = await AcademicSemester.find(filterCondition)
     .sort(sortCondition)
     .skip(skip)
     .limit(limit);
@@ -42,7 +88,13 @@ const getAllSemester = async (
   };
 };
 
+const getSingleSemester = async (id: string) => {
+  const result = await AcademicSemester.findById(id);
+  return result;
+};
+
 export const AcademicSemesterService = {
   createSemester,
   getAllSemester,
+  getSingleSemester,
 };
