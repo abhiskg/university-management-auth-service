@@ -1,4 +1,4 @@
-import type { Model } from "mongoose";
+import type { Document, Model, Types } from "mongoose";
 
 export type IAcademicSemesterTitles = "Autumn" | "Summer" | "Fall";
 export type IAcademicSemesterCodes = "01" | "02" | "03";
@@ -33,3 +33,15 @@ export type AcademicSemesterModel = Model<
 export type IAcademicSemesterFilters = {
   search?: string;
 };
+
+export type IAcademicSemesterMongoDBDocument = Document<
+  unknown,
+  Record<string, unknown>,
+  Partial<IAcademicSemester>
+> &
+  Omit<
+    IAcademicSemester & {
+      _id: Types.ObjectId;
+    },
+    never
+  >;

@@ -63,8 +63,60 @@ const getSingleSemester: RequestHandler = catchAsyncError(
   }
 );
 
+const updateSemester: RequestHandler = catchAsyncError(
+  async (req, res, next) => {
+    const { id } = req.params;
+    const updateAbleFields = pick(req.body, [
+      "title",
+      "year",
+      "code",
+      "startMonth",
+      "endMonth",
+    ]);
+
+    // const { title, year, code, startMonth, endMonth } = req.body;
+
+    const result = await AcademicSemesterService.getSingleSemester(id);
+
+    if (!result) {
+      return next(new ApiError(404, "Semester not Found"));
+    }
+
+    const updatedResult = await AcademicSemesterService.updateSemester(
+      result,
+      updateAbleFields
+    );
+
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Academic Semester Updated successfully!",
+      data: updatedResult,
+    });
+  }
+);
+
+const deleteSemester: RequestHandler = catchAsyncError(
+  async (req, res, next) => {
+    const result = await AcademicSemesterService.deleteSemester(req.params.id);
+
+    if (!result) {
+      return next(new ApiError(404, "Semester not Found"));
+    }
+
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "Academic semester deleted successfully!",
+      data: result,
+    });
+  }
+);
+
 export const AcademicSemesterController = {
   createSemester,
   getAllSemester,
   getSingleSemester,
+  updateSemester,
+  deleteSemester,
 };

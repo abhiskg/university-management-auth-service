@@ -9,6 +9,7 @@ import {
 import type {
   IAcademicSemester,
   IAcademicSemesterFilters,
+  IAcademicSemesterMongoDBDocument,
 } from "./academicSemester.interface";
 import AcademicSemester from "./academicSemester.mode";
 
@@ -93,8 +94,45 @@ const getSingleSemester = async (id: string) => {
   return result;
 };
 
+const updateSemester = async (
+  result: IAcademicSemesterMongoDBDocument,
+  payload: Partial<IAcademicSemester>
+) => {
+  if (
+    payload.title &&
+    payload.code &&
+    academicSemesterTitleCodeMapper[payload.title] !== payload.code
+  ) {
+    throw new ApiError(400, "Invalid Semester Code");
+  }
+
+  if (Object.keys(payload).length) {
+    Object.keys(payload).forEach((field) => {
+      if (field in result) {
+        // result[field as keyof IAcademicSemester] =
+        //   payload[field as keyof IAcademicSemester];
+      }
+    });
+  }
+  // result.title = payload.title || result.title;
+  // result.code = payload.code || result.code;
+  // result.year = payload.year || result.year;
+  // result.startMonth = payload.startMonth || result.startMonth;
+  // result.endMonth = payload.endMonth || result.endMonth;
+
+  const updatedResult = await result.save();
+  return updatedResult;
+};
+
+const deleteSemester = async (id: string) => {
+  const result = await AcademicSemester.findByIdAndDelete(id);
+  return result;
+};
+
 export const AcademicSemesterService = {
   createSemester,
   getAllSemester,
   getSingleSemester,
+  updateSemester,
+  deleteSemester,
 };

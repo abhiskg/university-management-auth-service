@@ -27,6 +27,31 @@ const createAcademicSemesterZodSchema = z.object({
   }),
 });
 
+const updateAcademicSemesterZodSchema = z
+  .object({
+    body: z.object({
+      title: z.enum(academicSemesterTitles).optional(),
+      year: z
+        .string()
+        .min(4, { message: "Year has to of min 4 letter" })
+        .optional(),
+      code: z
+        .enum([...academicSemesterCodes] as [string, ...string[]])
+        .optional(),
+      startMonth: z.enum(academicSemesterMonths).optional(),
+      endMonth: z.enum(academicSemesterMonths).optional(),
+    }),
+  })
+  .refine(
+    (data) =>
+      (data.body.title && data.body.code && data.body.year) ||
+      (!data.body.title && !data.body.code && !data.body.year),
+    {
+      message: "Title, Code and Year should be provided together",
+    }
+  );
+
 export const AcademicSemesterValidation = {
   createAcademicSemesterZodSchema,
+  updateAcademicSemesterZodSchema,
 };
