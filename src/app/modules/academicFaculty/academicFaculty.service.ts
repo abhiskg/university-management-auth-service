@@ -18,6 +18,8 @@ const getAllFaculty = async (
   filters: IAcademicFacultyFilters,
   paginationOptions: IPaginationOptions
 ) => {
+  const { search, ...filtersData } = filters;
+
   const { limit, page, skip, sortCondition } =
     PaginationHelper.calculatePagination(paginationOptions, {
       limit: 10,
@@ -26,14 +28,12 @@ const getAllFaculty = async (
       sortOrder: "desc",
     });
 
-  const { search, ...filtersData } = filters;
-
   const andConditions = [];
 
   if (search) {
     andConditions.push({
       $or: academicFacultySearchableFields.map((field) => ({
-        [field]: { $regex: search, options: "i" },
+        [field]: { $regex: search, $options: "i" },
       })),
     });
   }
@@ -49,7 +49,7 @@ const getAllFaculty = async (
   const filterCondition =
     andConditions.length > 0 ? { $and: andConditions } : {};
 
-  const result = AcademicFaculty.find(filterCondition)
+  const result = await AcademicFaculty.find(filterCondition)
     .sort(sortCondition)
     .skip(skip)
     .limit(limit);

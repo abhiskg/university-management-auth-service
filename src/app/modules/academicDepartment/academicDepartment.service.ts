@@ -51,7 +51,7 @@ const getAllDepartment = async (
   const filterCondition =
     andConditions.length > 0 ? { $and: andConditions } : {};
 
-  const result = AcademicDepartment.find(filterCondition)
+  const result = await AcademicDepartment.find(filterCondition)
     .populate("academicFaculty")
     .sort(sortCondition)
     .skip(skip)
