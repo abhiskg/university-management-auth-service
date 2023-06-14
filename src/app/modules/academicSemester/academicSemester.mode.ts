@@ -6,8 +6,8 @@ import {
   academicSemesterTitles,
 } from "./academicSemester.constant";
 import type {
-  AcademicSemesterModel,
   IAcademicSemester,
+  IAcademicSemesterModel,
 } from "./academicSemester.interface";
 
 const academicSemesterSchema = new Schema<IAcademicSemester>(
@@ -56,7 +56,7 @@ academicSemesterSchema.pre("save", async function (next) {
   next();
 });
 
-const AcademicSemester = model<IAcademicSemester, AcademicSemesterModel>(
+const AcademicSemester = model<IAcademicSemester, IAcademicSemesterModel>(
   "AcademicSemester",
   academicSemesterSchema
 );

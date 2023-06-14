@@ -1,16 +1,5 @@
-import type { Document, Types } from "mongoose";
-
-type IGenericMongoDBDocument<T> = Document<
-  unknown,
-  Record<string, unknown>,
-  Partial<T>
-> &
-  Omit<
-    T & {
-      _id: Types.ObjectId;
-    },
-    never
-  >;
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { IGenericMongoDBDocument } from "../interfaces/document.interface";
 
 const updateDocument = async <T extends object>(
   result: IGenericMongoDBDocument<T>,
@@ -19,13 +8,13 @@ const updateDocument = async <T extends object>(
   if (Object.keys(payload).length) {
     Object.keys(payload).forEach((field) => {
       if (field in result) {
-        // result[field as keyof T] = payload[field as keyof T];
+        (result as any)[field as keyof T] = payload[field as keyof T];
       }
     });
   }
 
   const updatedDocument = await result.save();
-  return updatedDocument;
+  return { updatedDocument };
 };
 
 export const UpdateHelper = {

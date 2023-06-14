@@ -1,5 +1,6 @@
 import ApiError from "../../../errors/ApiError";
 import { PaginationHelper } from "../../../helpers/pagination.helper";
+import { UpdateHelper } from "../../../helpers/update.helper";
 import type { IPaginationOptions } from "../../../interfaces/pagination.interface";
 import type { IGenericResponse } from "../../../interfaces/response.interface";
 import {
@@ -106,22 +107,27 @@ const updateSemester = async (
     throw new ApiError(400, "Invalid Semester Code");
   }
 
-  if (Object.keys(payload).length) {
-    Object.keys(payload).forEach((field) => {
-      if (field in result) {
-        // result[field as keyof IAcademicSemester] =
-        //   payload[field as keyof IAcademicSemester];
-      }
-    });
-  }
+  // if (Object.keys(payload).length) {
+  //   Object.keys(payload).forEach((field) => {
+  //     if (field in result) {
+  //       // result[field as keyof IAcademicSemester] =
+  //       //   payload[field as keyof IAcademicSemester];
+  //     }
+  //   });
+  // }
+
   // result.title = payload.title || result.title;
   // result.code = payload.code || result.code;
   // result.year = payload.year || result.year;
   // result.startMonth = payload.startMonth || result.startMonth;
   // result.endMonth = payload.endMonth || result.endMonth;
 
-  const updatedResult = await result.save();
-  return updatedResult;
+  const { updatedDocument } = await UpdateHelper.updateDocument(
+    result,
+    payload
+  );
+
+  return updatedDocument;
 };
 
 const deleteSemester = async (id: string) => {

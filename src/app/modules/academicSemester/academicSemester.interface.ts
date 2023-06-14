@@ -25,13 +25,16 @@ export type IAcademicSemester = {
   endMonth: IAcademicSemesterMonths;
 };
 
-export type AcademicSemesterModel = Model<
+export type IAcademicSemesterModel = Model<
   IAcademicSemester,
   Record<string, unknown>
 >;
 
 export type IAcademicSemesterFilters = {
   search?: string;
+  title?: string;
+  code?: string;
+  year?: string;
 };
 
 export type IAcademicSemesterMongoDBDocument = Document<
