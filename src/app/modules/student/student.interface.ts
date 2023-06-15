@@ -1,6 +1,6 @@
 import type { Model, Types } from "mongoose";
-import type { IAcademicFaculty } from "../academicFaculty/academicFaculty.interface";
 import type { IAcademicDepartment } from "../academicDepartment/academicDepartment.interface";
+import type { IAcademicFaculty } from "../academicFaculty/academicFaculty.interface";
 import type { IAcademicSemester } from "../academicSemester/academicSemester.interface";
 
 export type UserName = {
@@ -46,3 +46,12 @@ export type IStudent = {
 };
 
 export type StudentModel = Model<IStudent, Record<string, unknown>>;
+
+export type IStudentFilters = {
+  search?: string;
+  id?: string;
+  bloodGroup?: string;
+  email?: string;
+  contactNo?: string;
+  emergencyContactNo?: string;
+};

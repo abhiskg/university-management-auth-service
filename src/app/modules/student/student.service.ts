@@ -1,21 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { PaginationHelper } from "../../../helpers/pagination.helper";
 import { UpdateHelper } from "../../../helpers/update.helper";
 import { type IGenericMongoDBDocument } from "../../../interfaces/document.interface";
 import type { IPaginationOptions } from "../../../interfaces/pagination.interface";
-import { academicFacultySearchableFields } from "./academicFaculty.constant";
-import type {
-  IAcademicFaculty,
-  IAcademicFacultyFilters,
-} from "./academicFaculty.interface";
-import AcademicFaculty from "./academicFaculty.model";
+import pick from "../../../shared/pick";
+import { studentSearchableFields } from "./student.constant";
+import type { IStudent, IStudentFilters } from "./student.interface";
+import Student from "./student.model";
 
-const createFaculty = async (payload: IAcademicFaculty) => {
-  const result = await AcademicFaculty.create(payload);
-  return result;
-};
-
-const getAllFaculty = async (
-  filters: IAcademicFacultyFilters,
+const getAllStudent = async (
+  filters: IStudentFilters,
   paginationOptions: IPaginationOptions
 ) => {
   const { search, ...filtersData } = filters;
@@ -32,7 +26,7 @@ const getAllFaculty = async (
 
   if (search) {
     andConditions.push({
-      $or: academicFacultySearchableFields.map((field) => ({
+      $or: studentSearchableFields.map((field) => ({
         [field]: { $regex: search, $options: "i" },
       })),
     });
@@ -49,12 +43,15 @@ const getAllFaculty = async (
   const filterCondition =
     andConditions.length > 0 ? { $and: andConditions } : {};
 
-  const result = await AcademicFaculty.find(filterCondition)
+  const result = await Student.find(filterCondition)
+    .populate("academicFaculty")
+    .populate("academicDepartment")
+    .populate("academicSemester")
     .sort(sortCondition)
     .skip(skip)
     .limit(limit);
 
-  const total = await AcademicFaculty.countDocuments(filterCondition);
+  const total = await Student.countDocuments(filterCondition);
   return {
     meta: {
       page,
@@ -65,32 +62,39 @@ const getAllFaculty = async (
   };
 };
 
-const getSingleFaculty = async (id: string) => {
-  const result = await AcademicFaculty.findById(id);
+const getSingleStudent = async (id: string) => {
+  const result = await Student.findById(id)
+    .populate("academicFaculty")
+    .populate("academicDepartment")
+    .populate("academicSemester");
+
   return result;
 };
 
-const updateFaculty = async (
-  result: IGenericMongoDBDocument<IAcademicFaculty>,
-  payload: Partial<IAcademicFaculty>
+const updateStudent = async (
+  result: IGenericMongoDBDocument<IStudent>,
+  payload: Partial<IStudent>,
+  nestedObjects: Partial<IStudent>
 ) => {
+  const { name, guardian, localGuardian, ...studentData } = payload;
+
   const { updatedDocument } = await UpdateHelper.updateDocument(
     result,
-    payload
+    studentData,
+    nestedObjects
   );
 
   return updatedDocument;
 };
 
-const deleteFaculty = async (id: string) => {
-  const result = await AcademicFaculty.findByIdAndDelete(id);
+const deleteStudent = async (id: string) => {
+  const result = await Student.findByIdAndDelete(id);
   return result;
 };
 
-export const AcademicFacultyService = {
-  createFaculty,
-  getAllFaculty,
-  deleteFaculty,
-  getSingleFaculty,
-  updateFaculty,
+export const StudentService = {
+  getAllStudent,
+  deleteStudent,
+  getSingleStudent,
+  updateStudent,
 };
