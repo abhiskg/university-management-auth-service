@@ -3,16 +3,16 @@ import sendResponse from "../../../shared/sendResponse";
 import catchAsyncError from "../../middlewares/catchAsyncError";
 import { UserService } from "./user.service";
 
-const createNewUser: RequestHandler = catchAsyncError(async (req, res) => {
-  const { role, password } = req.body;
-  const result = await UserService.createUser({ role, password });
+const createStudent: RequestHandler = catchAsyncError(async (req, res) => {
+  const { student, ...userData } = req.body;
+  const result = await UserService.createStudent(student, userData);
 
   sendResponse(res, {
     statusCode: 200,
     success: true,
     data: result,
-    message: "user created successfully!",
+    message: "Student Account created successfully!",
   });
 });
 
-export const UserController = { createNewUser };
+export const UserController = { createStudent };
