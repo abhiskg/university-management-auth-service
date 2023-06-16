@@ -42,7 +42,6 @@ const getSingleStudent: RequestHandler = catchAsyncError(
 const updateStudent: RequestHandler = catchAsyncError(
   async (req, res, next) => {
     const { id } = req.params;
-    const nestedObjects = pick(req.body, ["name", "guardian", "localGuardian"]);
 
     const result = await StudentService.getSingleStudent(id);
 
@@ -50,11 +49,7 @@ const updateStudent: RequestHandler = catchAsyncError(
       return next(new ApiError(404, "Student not Found"));
     }
 
-    const updatedResult = await StudentService.updateStudent(
-      result,
-      req.body,
-      nestedObjects
-    );
+    const updatedResult = await StudentService.updateStudent(result, req.body);
 
     sendResponse(res, {
       statusCode: 200,

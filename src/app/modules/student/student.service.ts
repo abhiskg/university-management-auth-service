@@ -1,9 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { PaginationHelper } from "../../../helpers/pagination.helper";
-import { UpdateHelper } from "../../../helpers/update.helper";
 import { type IGenericMongoDBDocument } from "../../../interfaces/document.interface";
 import type { IPaginationOptions } from "../../../interfaces/pagination.interface";
-import pick from "../../../shared/pick";
 import { studentSearchableFields } from "./student.constant";
 import type { IStudent, IStudentFilters } from "./student.interface";
 import Student from "./student.model";
@@ -73,16 +70,41 @@ const getSingleStudent = async (id: string) => {
 
 const updateStudent = async (
   result: IGenericMongoDBDocument<IStudent>,
-  payload: Partial<IStudent>,
-  nestedObjects: Partial<IStudent>
+  payload: Partial<IStudent>
 ) => {
   const { name, guardian, localGuardian, ...studentData } = payload;
 
-  const { updatedDocument } = await UpdateHelper.updateDocument(
-    result,
-    studentData,
-    nestedObjects
-  );
+  if (Object.keys(studentData).length > 0) {
+    Object.keys(studentData).forEach((key) => {
+      if (key in result) {
+        result[key as keyof typeof studentData] =
+          studentData[key as keyof typeof studentData];
+      }
+    });
+  }
+
+  // result.name.firstName
+  if (name && Object.keys(name).length > 0) {
+    Object.keys(name).forEach((key) => {
+      result.name[key as keyof typeof name] = name[key as keyof typeof name];
+    });
+  }
+
+  if (guardian && Object.keys(guardian).length > 0) {
+    Object.keys(guardian).forEach((key) => {
+      result.guardian[key as keyof typeof guardian] =
+        guardian[key as keyof typeof guardian];
+    });
+  }
+
+  if (localGuardian && Object.keys(localGuardian).length > 0) {
+    Object.keys(localGuardian).forEach((key) => {
+      result.localGuardian[key as keyof typeof localGuardian] =
+        localGuardian[key as keyof typeof localGuardian];
+    });
+  }
+
+  const updatedDocument = await result.save();
 
   return updatedDocument;
 };
