@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { z } from "zod";
 import { userBloodGroup, userGender } from "../../../constants/user.constant";
+import { facultyDesignation } from "../faculty/faculty.constant";
 
 const createStudentZodSchema = z.object({
   body: z
@@ -94,6 +95,55 @@ const createStudentZodSchema = z.object({
     .strict(),
 });
 
+const createFacultyZodSchema = z.object({
+  body: z
+    .object({
+      password: z.string().optional(),
+      faculty: z
+        .object({
+          name: z.object({
+            firstName: z.string({ required_error: "First Name is required" }),
+            middleName: z.string().optional(),
+            lastName: z.string({ required_error: "Last Name is required" }),
+          }),
+          gender: z.enum(userGender, { required_error: "Gender is required" }),
+          dateOfBirth: z.string({
+            required_error: "Date of Birth is required",
+          }),
+          email: z.string({ required_error: "Email is required" }).email(),
+          contactNo: z.string({ required_error: "Contact Number is required" }),
+          emergencyContactNo: z.string({
+            required_error: "Emergency Contact Number is required",
+          }),
+          presentAddress: z.string({
+            required_error: "Present Address is required",
+          }),
+          permanentAddress: z.string({
+            required_error: "Permanent Address is required",
+          }),
+          bloodGroup: z.enum(userBloodGroup).optional(),
+          designation: z.enum(facultyDesignation),
+          academicDepartment: z
+            .string({
+              required_error: "Academic Department is required",
+            })
+            .refine((value) => Types.ObjectId.isValid(value), {
+              message: "Academic Department must be a valid ObjectId",
+            }),
+          academicFaculty: z
+            .string({
+              required_error: "Academic Faculty is required",
+            })
+            .refine((value) => Types.ObjectId.isValid(value), {
+              message: "Academic Faculty must be a valid ObjectId",
+            }),
+        })
+        .strict(),
+    })
+    .strict(),
+});
+
 export const UserValidation = {
   createStudentZodSchema,
+  createFacultyZodSchema,
 };
