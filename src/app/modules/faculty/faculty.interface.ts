@@ -20,6 +20,7 @@ export type IFaculty = {
   presentAddress: string;
   permanentAddress: string;
   designation: "Professor" | "Lecturer";
+  profileImage?: string;
   academicFaculty: Types.ObjectId | IAcademicFaculty; // reference _id
   academicDepartment: Types.ObjectId | IAcademicDepartment; // // reference _id
 };

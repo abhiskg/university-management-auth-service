@@ -76,6 +76,10 @@ const facultySchema = new Schema<IFaculty>(
       ref: "AcademicDepartment",
       required: true,
     },
+    profileImage: {
+      type: String,
+      // required: true,
+    },
   },
   {
     timestamps: true,
