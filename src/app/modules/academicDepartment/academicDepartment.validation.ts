@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { z } from "zod";
 
 const createAcademicDepartmentZodSchema = z.object({
@@ -5,9 +6,13 @@ const createAcademicDepartmentZodSchema = z.object({
     title: z.string({
       required_error: "Title is required",
     }),
-    academicFaculty: z.string({
-      required_error: "Academic Faculty is required",
-    }),
+    academicFaculty: z
+      .string({
+        required_error: "Academic Faculty is required",
+      })
+      .refine((value) => Types.ObjectId.isValid(value), {
+        message: "Academic Faculty must be a valid ObjectId",
+      }),
   }),
 });
 

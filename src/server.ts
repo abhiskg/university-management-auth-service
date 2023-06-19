@@ -27,10 +27,10 @@ process.on("uncaughtException", (error) => {
   }
 
   // unhandled rejection error
-  process.on("unhandledRejection", (error) => {
-    if (server) {
+  process.on("unhandledRejection", () => {
+    if (server && server.listening) {
       server.close(() => {
-        errorLogger.error(error);
+        errorLogger.error("Unhandled Rejection Error");
         process.exit(1);
       });
     } else {
@@ -38,21 +38,6 @@ process.on("uncaughtException", (error) => {
       process.exit(1);
     }
   });
-
-  // process.on("unhandledRejection", (reason, promise) => {
-  //   console.error("Unhandled Rejection:", reason, promise);
-  //   // Perform any necessary cleanup or logging
-
-  //   // Close the server
-  //   if (server) {
-  //     server.close(() => {
-  //       errorLogger.error("Unhandled Rejection Error");
-  //       process.exit(1);
-  //     });
-  //   } else {
-  //     process.exit(1);
-  //   }
-  // });
 })();
 
 // If our server crash suddenly/pm2, to get a signal

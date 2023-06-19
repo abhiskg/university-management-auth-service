@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { z } from "zod";
 import { userBloodGroup, userGender } from "../../../constants/user.constant";
 
@@ -66,15 +67,27 @@ const createStudentZodSchema = z.object({
             }),
           }),
           profileImage: z.string().optional(),
-          academicSemester: z.string({
-            required_error: "Academic Semester is required",
-          }),
-          academicDepartment: z.string({
-            required_error: "Academic Department is required",
-          }),
-          academicFaculty: z.string({
-            required_error: "Academic Faculty is required",
-          }),
+          academicSemester: z
+            .string({
+              required_error: "Academic Semester is required",
+            })
+            .refine((value) => Types.ObjectId.isValid(value), {
+              message: "Academic Semester must be a valid ObjectId",
+            }),
+          academicDepartment: z
+            .string({
+              required_error: "Academic Department is required",
+            })
+            .refine((value) => Types.ObjectId.isValid(value), {
+              message: "Academic Department must be a valid ObjectId",
+            }),
+          academicFaculty: z
+            .string({
+              required_error: "Academic Faculty is required",
+            })
+            .refine((value) => Types.ObjectId.isValid(value), {
+              message: "Academic Faculty must be a valid ObjectId",
+            }),
         })
         .strict(),
     })

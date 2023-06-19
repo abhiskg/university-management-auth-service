@@ -15,7 +15,7 @@ const handleDuplicateKeyError = (err: MongooseError): IGenericErrorResponse => {
 
   return {
     statusCode: 400,
-    message: "Validation Error",
+    message: "Duplicate key error",
     errorMessages,
   };
 };
