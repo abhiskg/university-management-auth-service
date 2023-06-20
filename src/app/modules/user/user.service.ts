@@ -45,7 +45,7 @@ const createStudent = async (student: IStudent, user: IUser) => {
     await session.abortTransaction();
     throw error;
   } finally {
-    session.endSession();
+    await session.endSession();
   }
 
   if (newUserAllData) {

@@ -11,8 +11,8 @@ export const facultySearchableFields = [
 export const facultyFilterableFields = [
   "search",
   "id",
-  "bloodGroup",
   "email",
   "contactNo",
   "emergencyContactNo",
+  "designation",
 ];
