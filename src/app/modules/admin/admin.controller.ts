@@ -58,12 +58,8 @@ const updateAdmin: RequestHandler = catchAsyncError(async (req, res, next) => {
   });
 });
 
-const deleteAdmin: RequestHandler = catchAsyncError(async (req, res, next) => {
+const deleteAdmin: RequestHandler = catchAsyncError(async (req, res) => {
   const result = await AdminService.deleteAdmin(req.params.id);
-
-  if (!result) {
-    return next(new ApiError(404, "Admin not Found"));
-  }
 
   sendResponse(res, {
     statusCode: 200,

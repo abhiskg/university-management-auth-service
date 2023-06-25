@@ -60,22 +60,16 @@ const updateFaculty: RequestHandler = catchAsyncError(
   }
 );
 
-const deleteFaculty: RequestHandler = catchAsyncError(
-  async (req, res, next) => {
-    const result = await FacultyService.deleteFaculty(req.params.id);
+const deleteFaculty: RequestHandler = catchAsyncError(async (req, res) => {
+  const result = await FacultyService.deleteFaculty(req.params.id);
 
-    if (!result) {
-      return next(new ApiError(404, "Faculty not Found"));
-    }
-
-    sendResponse(res, {
-      statusCode: 200,
-      success: true,
-      message: "Faculty deleted successfully!",
-      data: result,
-    });
-  }
-);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Faculty deleted successfully!",
+    data: result,
+  });
+});
 
 export const FacultyController = {
   getAllFaculty,

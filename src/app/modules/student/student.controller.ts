@@ -60,22 +60,16 @@ const updateStudent: RequestHandler = catchAsyncError(
   }
 );
 
-const deleteStudent: RequestHandler = catchAsyncError(
-  async (req, res, next) => {
-    const result = await StudentService.deleteStudent(req.params.id);
+const deleteStudent: RequestHandler = catchAsyncError(async (req, res) => {
+  const result = await StudentService.deleteStudent(req.params.id);
 
-    if (!result) {
-      return next(new ApiError(404, "Student not Found"));
-    }
-
-    sendResponse(res, {
-      statusCode: 200,
-      success: true,
-      message: "Student deleted successfully!",
-      data: result,
-    });
-  }
-);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Student deleted successfully!",
+    data: result,
+  });
+});
 
 export const StudentController = {
   getAllStudent,

@@ -1,6 +1,9 @@
+import { startSession } from "mongoose";
+import ApiError from "../../../errors/ApiError";
 import { PaginationHelper } from "../../../helpers/pagination.helper";
 import { type IGenericMongoDBDocument } from "../../../interfaces/document.interface";
 import type { IPaginationOptions } from "../../../interfaces/pagination.interface";
+import User from "../user/user.model";
 import { adminSearchableFields } from "./admin.constant";
 import type { IAdmin, IAdminFilters } from "./admin.interface";
 import Admin from "./admin.model";
@@ -91,8 +94,24 @@ const updateAdmin = async (
 };
 
 const deleteAdmin = async (id: string) => {
-  const result = await Admin.findByIdAndDelete(id);
-  return result;
+  const admin = await Admin.findOne({ id });
+
+  if (!admin) {
+    throw new ApiError(404, "Admin not found !");
+  }
+  const session = await startSession();
+  session.startTransaction();
+  try {
+    await admin.deleteOne({ session });
+    await User.deleteOne({ id }, { session });
+
+    await session.commitTransaction();
+  } catch (error) {
+    await session.abortTransaction();
+  } finally {
+    await session.endSession();
+  }
+  return admin;
 };
 
 export const AdminService = {

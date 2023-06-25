@@ -1,9 +1,12 @@
+import { startSession } from "mongoose";
+import ApiError from "../../../errors/ApiError";
 import { PaginationHelper } from "../../../helpers/pagination.helper";
 import { type IGenericMongoDBDocument } from "../../../interfaces/document.interface";
 import type { IPaginationOptions } from "../../../interfaces/pagination.interface";
 import { studentSearchableFields } from "./student.constant";
 import type { IStudent, IStudentFilters } from "./student.interface";
 import Student from "./student.model";
+import User from "../user/user.model";
 
 const getAllStudent = async (
   filters: IStudentFilters,
@@ -110,8 +113,24 @@ const updateStudent = async (
 };
 
 const deleteStudent = async (id: string) => {
-  const result = await Student.findByIdAndDelete(id);
-  return result;
+  const student = await Student.findOne({ id });
+
+  if (!student) {
+    throw new ApiError(404, "Student not found !");
+  }
+  const session = await startSession();
+  session.startTransaction();
+  try {
+    await student.deleteOne({ session });
+    await User.deleteOne({ id }, { session });
+
+    await session.commitTransaction();
+  } catch (error) {
+    await session.abortTransaction();
+  } finally {
+    await session.endSession();
+  }
+  return student;
 };
 
 export const StudentService = {

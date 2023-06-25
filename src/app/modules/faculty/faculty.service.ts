@@ -1,6 +1,9 @@
+import { startSession } from "mongoose";
+import ApiError from "../../../errors/ApiError";
 import { PaginationHelper } from "../../../helpers/pagination.helper";
 import { type IGenericMongoDBDocument } from "../../../interfaces/document.interface";
 import type { IPaginationOptions } from "../../../interfaces/pagination.interface";
+import User from "../user/user.model";
 import { facultySearchableFields } from "./faculty.constant";
 import type { IFaculty, IFacultyFilters } from "./faculty.interface";
 import Faculty from "./faculty.model";
@@ -93,8 +96,24 @@ const updateFaculty = async (
 };
 
 const deleteFaculty = async (id: string) => {
-  const result = await Faculty.findByIdAndDelete(id);
-  return result;
+  const faculty = await Faculty.findOne({ id });
+
+  if (!faculty) {
+    throw new ApiError(404, "Faculty not found !");
+  }
+  const session = await startSession();
+  session.startTransaction();
+  try {
+    await faculty.deleteOne({ session });
+    await User.deleteOne({ id }, { session });
+
+    await session.commitTransaction();
+  } catch (error) {
+    await session.abortTransaction();
+  } finally {
+    await session.endSession();
+  }
+  return faculty;
 };
 
 export const FacultyService = {
