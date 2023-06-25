@@ -2,11 +2,19 @@ import { startSession } from "mongoose";
 import config from "../../../config";
 import ApiError from "../../../errors/ApiError";
 import AcademicSemester from "../academicSemester/academicSemester.mode";
-import type { IStudent } from "../student/student.interface";
 import Student from "../student/student.model";
-import type { IUser } from "./user.interface";
 import User from "./user.model";
-import { generateStudentId } from "./user.utils";
+import {
+  generateAdminId,
+  generateFacultyId,
+  generateStudentId,
+} from "./user.utils";
+import Faculty from "../faculty/faculty.model";
+import Admin from "../admin/admin.model";
+import type { IUser } from "./user.interface";
+import type { IFaculty } from "../faculty/faculty.interface";
+import type { IAdmin } from "../admin/admin.interface";
+import type { IStudent } from "../student/student.interface";
 
 const createStudent = async (student: IStudent, user: IUser) => {
   // default password
@@ -68,4 +76,103 @@ const createStudent = async (student: IStudent, user: IUser) => {
   return newUserAllData;
 };
 
-export const UserService = { createStudent };
+const createFaculty = async (faculty: IFaculty, user: IUser) => {
+  // default password
+  if (!user.password) {
+    user.password = config.default_faculty_password;
+  }
+
+  // Role setup
+  user.role = "faculty";
+
+  const id = await generateFacultyId();
+  user.id = id;
+  faculty.id = id;
+
+  let newUserAllData = null;
+  // Transaction and Rollback
+  const session = await startSession();
+  session.startTransaction();
+  try {
+    //returns an array
+    const [newFaculty] = await Faculty.create([faculty], { session });
+
+    user.faculty = newFaculty._id;
+    const [newUser] = await User.create([user], { session });
+
+    newUserAllData = newUser;
+
+    await session.commitTransaction();
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    await session.endSession();
+  }
+
+  if (newUserAllData) {
+    newUserAllData = await User.findOne({ id: newUserAllData.id }).populate({
+      path: "faculty",
+      populate: [
+        {
+          path: "academicDepartment",
+        },
+        {
+          path: "academicFaculty",
+        },
+      ],
+    });
+  }
+
+  return newUserAllData;
+};
+
+const createAdmin = async (admin: IAdmin, user: IUser) => {
+  // default password
+  if (!user.password) {
+    user.password = config.default_admin_password;
+  }
+
+  // Role setup
+  user.role = "admin";
+
+  const id = await generateAdminId();
+  user.id = id;
+  admin.id = id;
+
+  let newUserAllData = null;
+  // Transaction and Rollback
+  const session = await startSession();
+  session.startTransaction();
+  try {
+    //returns an array
+    const [newAdmin] = await Admin.create([Admin], { session });
+
+    user.admin = newAdmin._id;
+    const [newUser] = await User.create([user], { session });
+
+    newUserAllData = newUser;
+
+    await session.commitTransaction();
+  } catch (error) {
+    await session.abortTransaction();
+    throw error;
+  } finally {
+    await session.endSession();
+  }
+
+  if (newUserAllData) {
+    newUserAllData = await User.findOne({ id: newUserAllData.id }).populate({
+      path: "admin",
+      populate: [
+        {
+          path: "managementDepartment",
+        },
+      ],
+    });
+  }
+
+  return newUserAllData;
+};
+
+export const UserService = { createStudent, createFaculty, createAdmin };

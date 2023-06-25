@@ -15,4 +15,30 @@ const createStudent: RequestHandler = catchAsyncError(async (req, res) => {
   });
 });
 
-export const UserController = { createStudent };
+const createFaculty: RequestHandler = catchAsyncError(async (req, res) => {
+  const { faculty, ...userData } = req.body;
+
+  const result = await UserService.createFaculty(faculty, userData);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    data: result,
+    message: "Faculty Account created successfully!",
+  });
+});
+
+const createAdmin: RequestHandler = catchAsyncError(async (req, res) => {
+  const { admin, ...userData } = req.body;
+
+  const result = await UserService.createAdmin(admin, userData);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    data: result,
+    message: "Faculty Account created successfully!",
+  });
+});
+
+export const UserController = { createStudent, createFaculty, createAdmin };
