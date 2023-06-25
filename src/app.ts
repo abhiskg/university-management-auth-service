@@ -1,3 +1,4 @@
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { type Request, type Response } from "express";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler";
@@ -10,7 +11,7 @@ app.use(cors());
 // Parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cookieParser());
 // app.get("/", () => {
 //   Promise.reject(new Error("Unhandled promise Rejection"));
 // });
