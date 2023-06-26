@@ -24,6 +24,25 @@ const loginUser: RequestHandler = catchAsyncError(async (req, res) => {
   });
 });
 
+const refreshToken: RequestHandler = catchAsyncError(async (req, res) => {
+  const result = await AuthService.refreshToken(req.cookies);
+
+  res.cookie("refreshToken", refreshToken, {
+    secure: config.env === "production",
+    httpOnly: true,
+    sameSite: "strict", // Prevent CSRF attacks
+    maxAge: 30 * 24 * 60 * 60 * 1000, //30days
+  });
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "User login successfully!",
+    data: result,
+  });
+});
+
 export const AuthController = {
   loginUser,
+  refreshToken,
 };

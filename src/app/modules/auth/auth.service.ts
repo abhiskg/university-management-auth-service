@@ -1,3 +1,4 @@
+import type { JwtPayload } from "jsonwebtoken";
 import config from "../../../config";
 import ApiError from "../../../errors/ApiError";
 import { JwtHelper } from "../../../helpers/jwt.helper";
@@ -42,6 +43,37 @@ const loginUser = async (payload: ILoginUser) => {
   };
 };
 
+const refreshToken = async (token: string) => {
+  try {
+    const verifiedToken = JwtHelper.verifyToken(
+      token,
+      config.jwt.refresh_secret
+    ) as JwtPayload;
+
+    const user = User.findOne({ id: verifiedToken.userId }).lean();
+
+    if (!user) {
+      throw new ApiError(404, "User doesn't exist");
+    }
+
+    const tokenPayload = {
+      id: user.id,
+      role: user.role,
+    };
+
+    const accessToken = JwtHelper.generateToken(
+      tokenPayload,
+      config.jwt.access_secret,
+      config.jwt.access_expires_in
+    );
+
+    return { accessToken };
+  } catch (error) {
+    throw new ApiError(403, "Invalid Refresh Token");
+  }
+};
+
 export const AuthService = {
   loginUser,
+  refreshToken,
 };
