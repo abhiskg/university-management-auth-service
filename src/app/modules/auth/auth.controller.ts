@@ -25,7 +25,8 @@ const loginUser: RequestHandler = catchAsyncError(async (req, res) => {
 });
 
 const refreshToken: RequestHandler = catchAsyncError(async (req, res) => {
-  const result = await AuthService.refreshToken(req.cookies);
+  const { refreshToken } = req.cookies;
+  const result = await AuthService.refreshToken(refreshToken);
 
   res.cookie("refreshToken", refreshToken, {
     secure: config.env === "production",
@@ -37,7 +38,7 @@ const refreshToken: RequestHandler = catchAsyncError(async (req, res) => {
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "User login successfully!",
+    message: "New access token generated successfully !",
     data: result,
   });
 });
