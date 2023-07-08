@@ -11,6 +11,7 @@ export type IUser = {
   student?: Types.ObjectId | IStudent;
   admin?: Types.ObjectId | IAdmin;
   faculty?: Types.ObjectId | IFaculty;
+  passwordChangedAt?: Date;
 };
 
 export type IUserMethods = {

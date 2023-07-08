@@ -22,6 +22,9 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
       type: Boolean,
       default: true,
     },
+    passwordChangedAt: {
+      type: Date,
+    },
     student: {
       type: Schema.Types.ObjectId,
       ref: "Student",
@@ -57,6 +60,9 @@ userSchema.pre("save", async function (next) {
 
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+  if (!this.needPasswordChange) {
+    this.passwordChangedAt = new Date();
+  }
 });
 
 const User = model<IUser, UserModel>("User", userSchema);

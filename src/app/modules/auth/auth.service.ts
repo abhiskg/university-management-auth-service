@@ -3,7 +3,7 @@ import config from "../../../config";
 import ApiError from "../../../errors/ApiError";
 import { JwtHelper } from "../../../helpers/jwt.helper";
 import User from "../user/user.model";
-import type { ILoginUser } from "./auth.interface";
+import type { ILoginUser, INeedPasswordChange } from "./auth.interface";
 
 const loginUser = async (payload: ILoginUser) => {
   const { id, password } = payload;
@@ -73,7 +73,30 @@ const refreshToken = async (token: string) => {
   }
 };
 
+const changePassword = async (
+  jwtUser: JwtPayload,
+  payload: INeedPasswordChange
+) => {
+  const { oldPassword, newPassword } = payload;
+
+  const user = await User.findOne({ id: jwtUser?.userId }).select("+password");
+
+  if (!user) {
+    throw new ApiError(401, "Invalid User");
+  }
+
+  if (!(await user.isPasswordMatched(oldPassword, user.password))) {
+    throw new ApiError(401, "Old Password is incorrect");
+  }
+
+  user.password = newPassword;
+  user.needPasswordChange = false;
+
+  await user.save();
+};
+
 export const AuthService = {
   loginUser,
   refreshToken,
+  changePassword,
 };

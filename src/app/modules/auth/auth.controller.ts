@@ -3,6 +3,7 @@ import config from "../../../config";
 import sendResponse from "../../../shared/sendResponse";
 import catchAsyncError from "../../middlewares/catchAsyncError";
 import { AuthService } from "./auth.service";
+import type { JwtPayload } from "jsonwebtoken";
 
 const loginUser: RequestHandler = catchAsyncError(async (req, res) => {
   const result = await AuthService.loginUser(req.body);
@@ -43,7 +44,18 @@ const refreshToken: RequestHandler = catchAsyncError(async (req, res) => {
   });
 });
 
+const changePassword: RequestHandler = catchAsyncError(async (req, res) => {
+  await AuthService.changePassword(req.user as JwtPayload, req.body);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "User password updated",
+  });
+});
+
 export const AuthController = {
   loginUser,
   refreshToken,
+  changePassword,
 };
